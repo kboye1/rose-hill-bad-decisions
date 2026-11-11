@@ -1,0 +1,20 @@
+const fs=require('fs'),vm=require('vm'),path=require('path'),assert=require('node:assert/strict');
+const elements={},ctx=new Proxy({}, {get:(o,k)=>k==='measureText'?()=>({width:10}):k==='createLinearGradient'?()=>({addColorStop(){}}):()=>{}});
+function el(s){return elements[s]??={style:{},hidden:true,value:s==='#difficulty'?'easy':'freeroam',textContent:'',children:[],getContext:()=>ctx,addEventListener(){},requestPointerLock(){},appendChild(v){this.children.push(v)},replaceChildren(){this.children=[]}}}
+const sandbox={window:{},document:{body:{classList:{toggle(){}}},querySelector:el,createElement:()=>({...el('template'),children:[]}),addEventListener(){},exitPointerLock(){}},innerWidth:1000,innerHeight:700,addEventListener(){},localStorage:{getItem:()=>null,setItem(){}},performance:{now:()=>0},requestAnimationFrame(){},console,assert};vm.createContext(sandbox);for(const f of ['game.js','activities.js'])vm.runInContext(fs.readFileSync(path.join(__dirname,'..',f),'utf8'),sandbox);
+vm.runInContext(`
+const inside=p=>p.x>MAP_BOUNDS.minX&&p.x<MAP_BOUNDS.maxX&&p.y>MAP_BOUNDS.minY&&p.y<MAP_BOUNDS.maxY;
+for(const prop of sceneryBlocks)assert(blocked(prop.x,prop.y),'event tables and central benches have collision');assert.equal(fields.length,1);assert(buildings.some(b=>b.name==='MCSHANE CAMPUS CENTER')&&buildings.some(b=>b.name==='ROSE HILL GYMNASIUM'),'restored modern center and gym');assert.equal(buildings.length,11);
+const duane=buildings.find(b=>b.name==='DUANE LIBRARY'),dealy=buildings.find(b=>b.name==='DEALY HALL');
+assert(duane.x+duane.w<dealy.x&&duane.y>dealy.y+dealy.h,'Duane stays southwest of the courtyard');
+assert((MAP_BOUNDS.maxX-MAP_BOUNDS.minX)*(MAP_BOUNDS.maxY-MAP_BOUNDS.minY)<900,'Duane expansion remains compact');
+for(const p of [...props,...guards,...students,player,cart,...storyDefinitions.map(d=>d.meet),shoeSpot,usbSpot,samSpot,homeSpot,eddiesSpot,nicoSpot]){assert(inside(p),'everything in map crop');assert(!blocked(p.x,p.y),'every interaction/spawn is in clear space');}
+for(const p of [...storyDefinitions.map(d=>d.meet),shoeSpot,usbSpot,samSpot,homeSpot,eddiesSpot])assert(route(player,p).length,'every story stop remains reachable');
+for(const [x,y] of [[MAP_BOUNDS.minX-.1,30],[MAP_BOUNDS.maxX+.1,30],[25,MAP_BOUNDS.minY-.1],[25,MAP_BOUNDS.maxY+.1]])assert(blocked(x,y),'all map edges are enforced');
+assert(landmarks.find(p=>p.id==='ram')&&landmarks.find(p=>p.id==='fountain'));const ram=landmarks.find(p=>p.id==='ram');assert(blocked(ram.x,ram.y),'ram base has collision');started=true;running=true;mode='freeroam';player.x=ram.x+.6;player.y=ram.y;interact();assert($('#dialogue-title').textContent.includes('FORDHAM RAM'),'ram plaque opens near the sculpture');leaveConversation();
+renderJournal();assert.equal($('#journal-list').children.length,10,'journal offers four stories and six landmarks');$('#journal-list').children[4].children[1].onclick();assert.equal(trackedLandmark,'ram');assert.equal(tracked,null);assert.equal(missionWaypoint().id,'ram');assert.equal(missionWaypoint().id,'ram','waypoint reads do not change tracking');interact();chooseDialogue(0);assert.equal(trackedLandmark,null,'returning from the plaque clears its beacon');assert(running);
+renderJournal();$('#journal-list').children[5].children[1].onclick();assert.equal(trackedLandmark,'fountain');$('#journal-list').children[0].children[2].onclick();assert.equal(tracked,'walk');assert.equal(trackedLandmark,null,'story tracking replaces a landmark');resetStories();assert.equal(tracked,null);assert.equal(trackedLandmark,null);
+window.activityAPI.start('escape');assert(inside(window.activityAPI.waypoint())&&!blocked(window.activityAPI.waypoint().x,window.activityAPI.waypoint().y),'flyer moved inside crop');assert(window.activityAPI.waypoint().label.includes('KEATING'));window.activityAPI.reset();
+minimap();assert(window.campusState().bounds&&window.campusState().landmarks.length===6,'renderer receives the cropped map and landmarks');
+`,sandbox);
+console.log('PASS: central campus plus McShane/gym, bounded map, reachable relocated missions, all actors inside crop, landmark plaques/tracking and Keating flyer');

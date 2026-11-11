@@ -1,0 +1,28 @@
+import * as THREE from '../three.module.js';
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+const source=fs.readFileSync(new URL('../world3d.js',import.meta.url),'utf8');
+const cameraFunction=source.slice(source.indexOf('function cameraPositionFor(s){'),source.indexOf('\nwindow.renderCampus3D='));
+const camera=new THREE.PerspectiveCamera();
+const scope={THREE,camera,S:8};vm.createContext(scope);
+vm.runInContext('let cameraReady=false,lastView=null,lastDriving=null; const chaseTarget=new THREE.Vector3(),desiredCamera=new THREE.Vector3(),safeCamera=new THREE.Vector3();'+cameraFunction,scope);
+const s={player:{x:20,y:20,a:0,pitch:0},thirdPerson:true,driving:false,jump:0,cameraDistance:4.8,cameraSolid:()=>false};
+scope.state=s;vm.runInContext('cameraPositionFor(state)',scope);
+assert(camera.position.x<s.player.x*8,'camera follows behind player');
+assert(Number.isFinite(camera.position.y));
+s.player={x:16,y:12,a:0,pitch:.28};s.cameraSolid=(x,z,r=.12)=>x>10-r&&x<15+r&&z>10-r&&z<15+r;
+vm.runInContext('lastView=true;lastDriving=false;cameraPositionFor(state)',scope);
+assert(!s.cameraSolid(camera.position.x/8,camera.position.z/8,.08),'camera retracts before a building wall');assert(Math.abs(camera.getWorldDirection(new THREE.Vector3()).y)<.4,'wall retraction preserves viewing pitch');
+// An actor standing just outside a wall must not trigger an immediate false obstruction.
+s.player={x:15.085,y:12,a:Math.PI,pitch:0};s.cameraDistance=4.8;
+vm.runInContext('cameraReady=false;cameraPositionFor(state)',scope);
+assert(Math.hypot(camera.position.x-s.player.x*8,camera.position.z-s.player.y*8)>3,'camera stays behind actor at an entrance');
+s.player={x:16,y:12,a:0,pitch:.28};s.thirdPerson=false;vm.runInContext('cameraPositionFor(state)',scope);
+assert.equal(camera.position.x,128);assert.equal(camera.position.z,96);assert.equal(camera.position.y,1.75);
+s.thirdPerson=true;s.driving=true;s.player={x:25,y:20,a:Math.PI/2,pitch:.1};vm.runInContext('cameraPositionFor(state)',scope);
+assert(camera.position.z<s.player.y*8,'vehicle camera follows its heading');
+s.vehicleId='supercar';s.thirdPerson=false;
+vm.runInContext('cameraPositionFor(state)',scope);
+assert.equal(camera.position.y,1.12,'supercar uses the low cockpit camera');
+console.log('PASS: third-person follow, wall retraction, first-person placement, vehicle chase direction');
