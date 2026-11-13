@@ -21,3 +21,12 @@ Generated with the built-in image generation tool from written descriptions of t
 ### loading-gym.jpg
 
 > Use case: stylized-concept. Original landscape 16:9 loading-screen artwork for a Fordham Rose Hill college comedy game. The Rose Hill Gymnasium entrance dominates the center-right on game night, blue hour. Recreate the recognizable main facade: broad low gray rough fieldstone, shallow central gable with small medallion, huge Tudor pointed surround framing tall vertical traceried lights over three side-by-side warm wood double doors, two small window levels to either side. Two broad straight flights of gray steps with a landing, slim black handrails and low lawn banks. A small hint of the neighboring contemporary glass campus center at far left only. Warm door light, soft blue dusk, tidy planting, subdued shadows at lower left for HTML UI. Realistic architectural editorial illustration with polished hand-painted texture. No arena signage, invented stadium, columns, students, lettering, UI or watermarks.
+
+## In-game surface textures and sky
+
+The graphics update uses locally bundled WebP copies of these [CC0 Poly Haven assets](https://polyhaven.com/license).
+
+- Lawn color, normal and roughness maps from [Leafy Grass](https://polyhaven.com/a/leafy_grass) by Charlotte Baglioni.
+- Walkway color, normal and roughness maps from [Rectangular Paving](https://polyhaven.com/a/rectangular_paving) by Dimitrios Savva.
+- Masonry color, normal and roughness maps from [Rock Wall 08](https://polyhaven.com/a/rock_wall_08) by Amal Kumar.
+- The cloud and sky panorama is a reduced copy of [Kloofendal 48d Partly Cloudy (Pure Sky)](https://polyhaven.com/a/kloofendal_48d_partly_cloudy_puresky) by Greg Zaal and Jarod Guest. The renderer grades it to match the campus lighting.
