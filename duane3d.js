@@ -1,7 +1,7 @@
 import * as THREE from './three.module.js';
 
 // Duane's 1926 exterior with the grade-level entry and stair towers from the 2004 renovation.
-export function buildDuane(b, {S, scene, box, material, archPanel, surfaceTexture, seededRandom, tiledGround, walkMaterial}) {
+export function buildDuane(b, {S, scene, box, material, archPanel, surfaceTexture, seededRandom, tiledGround, walkMaterial, surfaceMaterial}) {
  const front=(b.x+b.w)*S, center=(b.y+b.h/2)*S;
  const width=b.h*S, depth=b.w*S, height=10.6, towerWidth=7.8, towerHeight=20.8;
  const root=new THREE.Group();
@@ -34,7 +34,7 @@ export function buildDuane(b, {S, scene, box, material, archPanel, surfaceTextur
    c.fillRect(random()*w,random()*h,1+random()*2,1.5);
   }
  });
- const wall=material('#ffffff',{map:stones,bumpMap:stones,bumpScale:.085});
+ const wall=surfaceMaterial('fieldstone',stones,'#d4d3c5',.9);
  const stone=material('#c2b9a5'),cap=material('#a8a18e');
  const lead=material('#827e71'),zinc=material('#6a7878',{roughness:.49,metalness:.26});
  const glass=material('#677d81',{roughness:.38,metalness:.24});
@@ -47,8 +47,8 @@ export function buildDuane(b, {S, scene, box, material, archPanel, surfaceTextur
   const mesh=block(w,h,d,wall,x,y,z),{uv,position,normal}=mesh.geometry.attributes;
   for(let i=0;i<uv.count;i++){
    const side=Math.abs(normal.getX(i))>.5, flat=Math.abs(normal.getY(i))>.5;
-   uv.setXY(i,(side?position.getZ(i)+z:position.getX(i)+x)/5.8,
-    (flat?position.getZ(i)+z:position.getY(i)+y)/6.6);
+   uv.setXY(i,(side?position.getZ(i)+z:position.getX(i)+x)/3.2,
+    (flat?position.getZ(i)+z:position.getY(i)+y)/3.2);
   }
   return mesh;
  }

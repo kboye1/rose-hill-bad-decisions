@@ -1,4 +1,4 @@
-# Rose Hill: Bad Decisions
+# Grand Theft Tuition
 
 By **Kalie Boye**
 
@@ -6,7 +6,16 @@ A third-person campus comedy set around Fordham’s Edwards Parade. Explore the 
 
 ## Play in your browser
 
-[Open Rose Hill: Bad Decisions](https://kboye1.github.io/rose-hill-bad-decisions/) on a desktop with a keyboard and mouse.
+[Open Grand Theft Tuition](https://kboye1.github.io/rose-hill-bad-decisions/) on a phone with touch controls or on a desktop with a keyboard and mouse.
+
+## Install on a phone
+
+- **iPhone or iPad** — Open the game link in Safari, tap **Share**, then **Add to Home Screen** and **Add**. Turn on **Open as Web App** if Safari offers it.
+- **Android** — Open the game link in Chrome. Use **Install App** on the title screen if it appears, or choose **Add to Home screen** from Chrome’s menu.
+
+Open the game online once to download its assets. Later launches can play offline after the download finishes. Landscape gives the controls more room. Drag the left stick to move and drag the scene to look around. Tap **Use** for conversations and objectives or **Vehicle** to get in or out. In a vehicle, push the stick forward or back for gas or reverse and left or right to steer. Hold **Brake** to stop and **Boost** for a burst of speed.
+
+On a computer, choose **Use Touch Controls** on the title screen to try this layout.
 
 ## Play locally
 

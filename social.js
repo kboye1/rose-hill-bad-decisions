@@ -23,7 +23,7 @@
   else if(action==='dance'){crowd('dance');react('A dance floor is a state of mind. G or move to stop.');}
   else react('Updating the personal brand. No one asked.');return true;
  }
- function toggle(){if(!started||dialogueOpen||window.activityAPI?.menuOpen()||!$('#journal').hidden||window.presentationAPI?.isOpen?.()||window.lifeAPI?.menuOpen())return;if(!menu&&!running)return;menu=!menu;$('#social-panel').hidden=!menu;keys={};running=!menu;if(menu)document.exitPointerLock?.();else canvas.requestPointerLock?.()?.catch?.(()=>{});}
+ function toggle(){if(!started||dialogueOpen||window.activityAPI?.menuOpen()||!$('#journal').hidden||window.presentationAPI?.isOpen?.()||window.lifeAPI?.menuOpen())return;if(!menu&&!running)return;menu=!menu;$('#social-panel').hidden=!menu;keys={};running=!menu;if(menu)document.exitPointerLock?.();else captureMouse();}
  function pick(action){if(!menu)return;toggle();perform(action);}
  function handleKey(e){if(menu){if(e.code==='Tab'||e.code==='Escape'){e.preventDefault();toggle();}else if(/^Digit[1-4]$/.test(e.code)){e.preventDefault();pick(['wave','roast','dance','pose'][Number(e.code.slice(-1))-1]);}return true;}if(e.code==='Tab'&&started&&running){e.preventDefault();if(!e.repeat)toggle();return true;}if(e.code==='KeyG'&&running&&!e.repeat){perform('dance');return true;}if(e.code==='KeyT'&&running&&!e.repeat){perform('wave');return true;}return false;}
  const zones=[['ROSE HILL GYM',1190,546,3.1],['MCSHANE CAMPUS CENTER',1080,525,4],['HUGHES / GABELLI',995,672,2.5],['DEALY / STARBUCKS',1030,778,2.2],['CUNNIFFE COURT',965,701,2.8],['DUANE LIBRARY WALK',903,904,3.3],['FREEMAN WALK',1135,810,2.7],['KEATING TERRACE',1220,722,2.7]];

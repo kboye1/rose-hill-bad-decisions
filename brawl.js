@@ -15,7 +15,7 @@
   if(n.hp<=0){n.downUntil=elapsed+9;n.fighting=false;n.hp=0;window.lifeAPI?.onKnockdown(n);window.activityAPI?.react(guard?'Someone has made a catastrophically bad decision.':'He’s fine. His personal brand needs a minute.');}
   else if(!guard&&n.brave)challenge(n);else if(!guard){n.panicUntil=elapsed+9;n.fighting=false;}
  }
- function damage(amount){if(defeatedUntil||elapsed-lastHurt<.65)return;const guarded=blocking&&stamina>=8;health=Math.max(0,health-(guarded?amount*.2:amount));if(guarded)stamina=Math.max(0,stamina-8);lastHurt=elapsed;window.activityAPI?.spill(guarded?5:20);hurtFlash=guarded?.18:.55;window.activityAPI?.effect(guarded?'block':'hit');toast(guarded?'BLOCKED · Z / RIGHT MOUSE':'WATCH THE BLAZER · Z TO BLOCK');
+ function damage(amount){if(defeatedUntil||elapsed-lastHurt<.65)return;const guarded=blocking&&stamina>=8;gameFeedback('impact');health=Math.max(0,health-(guarded?amount*.2:amount));if(guarded)stamina=Math.max(0,stamina-8);lastHurt=elapsed;window.activityAPI?.spill(guarded?5:20);hurtFlash=guarded?.18:.55;window.activityAPI?.effect(guarded?'block':'hit');toast(guarded?'BLOCKED · Z / RIGHT MOUSE':'WATCH THE BLAZER · Z TO BLOCK');
   if(health<=0){defeatedUntil=elapsed+2.5;player.downUntil=defeatedUntil;swing=null;blocking=false;keys={};window.activityAPI?.busted();window.lifeAPI?.fine(20,'Student Health called it “an avoidable fucking incident.”');}
  }
  function update(dt){hurtFlash=Math.max(0,hurtFlash-dt*1.7);blocking=available()&&!!(keys.KeyZ||keys.MouseRight)&&stamina>3&&!swing;
